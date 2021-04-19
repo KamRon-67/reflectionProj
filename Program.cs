@@ -5,93 +5,41 @@ namespace reflectionProj
      class Program
     {
         static void Main(string[] args)
-        {
-            Coder RegularRyan = new Coder();
-            var BillLumbergh = new ProjectManager();
+		{
+			Type personType = typeof(Person);
 
-             //Better Way with reflection
-            var MyBetterEmployee = new BetterEmployee(RegularRyan);
-            MyBetterEmployee.RearWork();
+			var properties = personType.GetProperties();
+			foreach (var item in properties)
+			{
+				Console.WriteLine($"Property: Type: {item.PropertyType.Name} | Name: {item.Name}");
+			}
 
-            MyBetterEmployee = new BetterEmployee(BillLumbergh);
-            MyBetterEmployee.RearWork();
-        }
-    }
+			var methods = personType.GetMethods();
+			foreach (var item in methods)
+			{
+				Console.WriteLine($"Method: Type: {item.ReturnType.Name} | Name {item.Name}");
+			}
 
-    public interface IEmployee
-    {
-        public EnumEmployeeClass EmployeeClass { get; }
-        public void Work(){}
-    }
+			Console.ReadKey();
+		}
 
-    public abstract class Employee : IEmployee
-    {
-        public abstract EnumEmployeeClass EmployeeClass { get; }
+		public class Person
+		{
+			public string FirstName { get; set; }
+			public string LastName { get; set; }
+			public string Phone { get; set; }
+			public int ZipCode { get; set; }
 
-        public void Work()
-        {
-            Console.WriteLine("Employee Works");
-        }
+			public void Print()
+			{
+				Console.WriteLine($"{FirstName} {LastName}");
+			}
 
-        public void TakeBreak()
-        {
-            Console.WriteLine("Employee Take Breaks");
-        }
-
-    }
-
-    class CFO : Employee
-    {
-        public override EnumEmployeeClass EmployeeClass { get { return EnumEmployeeClass.CFO; } }
-
-        public void Quits()
-        {
-            Console.WriteLine("CFO Quits");
-        }
-    }
-
-    class ProjectManager : Employee
-    {
-        public override EnumEmployeeClass EmployeeClass { get { return EnumEmployeeClass.CFO; } }
-
-        public void Quits()
-        {
-            Console.WriteLine("Project Manager Quits");
-        }
-    }
-
-    class Salesperson : Employee
-    {
-        public override EnumEmployeeClass EmployeeClass { get { return EnumEmployeeClass.CFO; } }
-
-        public void Quits()
-        {
-            Console.WriteLine("Salesperson Quits");
-        }
-    }
-
-    class QA : Employee
-    {
-        public override EnumEmployeeClass EmployeeClass { get { return EnumEmployeeClass.QA; } }
-    }
-
-    class Coder : Employee
-    {
-        public override EnumEmployeeClass EmployeeClass { get { return EnumEmployeeClass.Coder; } }
-    }
-
-    class BA : Employee
-    {
-        public override EnumEmployeeClass EmployeeClass { get { return EnumEmployeeClass.BA; } }
-    }
-
-    public enum EnumEmployeeClass
-    {
-        CFO,
-        Coder,
-        BA,
-        QA,
-        ProjectManager
-
-    }
+			public void Move(int newZipCode)
+			{
+				ZipCode = newZipCode;
+				Console.WriteLine($"{FirstName} {LastName} has been moved to {newZipCode}");
+			}
+		}
+	}
 }

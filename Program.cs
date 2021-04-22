@@ -40,13 +40,13 @@ namespace reflectionProj
 			public string Phone { get; set; }
 			public int ZipCode { get; set; }
 
-			[MethodForRun(RunCount = 3)]
+			[RunMethod(Count = 3)]
 			public void Print()
 			{
 				Console.WriteLine($"{FirstName} {LastName}");
 			}
 
-			[MethodForRun(RunCount = 3)]
+			[RunMethod(Count = 3)]
 			public void TestMethod()
 			{
 				Console.WriteLine("Hello from TestMethod");
@@ -58,7 +58,7 @@ namespace reflectionProj
 				Console.WriteLine($"{FirstName} {LastName} has been moved to {newZipCode}");
 			}
 
-			[MethodForRun(RunCount = 1)]
+			[RunMethod(Count = 1)]
 			public void SayHi()
 			{
 				Console.WriteLine($"Hi {FirstName}");
@@ -70,24 +70,24 @@ namespace reflectionProj
 		{
 			// Get the methods
 			var allMethods = type.GetMethods();
-			var methodsWithAttribute = allMethods.Where(m => m.GetCustomAttribute(typeof(MethodForRunAttribute)) != null);
+			var methodsWithAttribute = allMethods.Where(m => m.GetCustomAttribute(typeof(RunMethodAttribute)) != null);
 
 			var obj = Activator.CreateInstance(type);
 
 			foreach (var item in methodsWithAttribute)
 			{
-				var attribute = (MethodForRunAttribute)item.GetCustomAttribute(typeof(MethodForRunAttribute));
-				Console.WriteLine($"{item.Name} run for {attribute.RunCount} times");
-				for (int i = 0; i < attribute.RunCount; i++)
+				var attribute = (RunMethodAttribute)item.GetCustomAttribute(typeof(RunMethodAttribute));
+				Console.WriteLine($"{item.Name} run for {attribute.Count} times");
+				for (int i = 0; i < attribute.Count; i++)
 				{
 					item.Invoke(obj, null);
 				}
 			}
 		}
 
-		public class MethodForRunAttribute : Attribute
+		public class RunMethodAttribute : Attribute
 		{
-			public int RunCount { get; set; }
+			public int Count { get; set; }
 		}
 	}
 }
